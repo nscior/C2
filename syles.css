@@ -1,0 +1,94 @@
+/* https://codepen.io/web-dot-dev/pen/ExePgOg */
+
+@layer base;
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: true;
+}
+
+@keyframes adjust-angle {
+    to {
+        --angle: 360deg;
+    }
+}
+
+.dot {
+    animation: adjust-angle linear 10s infinite normal;
+    animation-play-state: running;
+    /* Make it round */
+    display: block;
+    width: 20px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    text-align: center;
+
+    /* Color it, giving each color a different hue based on the --angle-offset */
+    background: blue;
+    border: 1px solid #333;
+
+    /* Center it */
+    position: absolute;
+    left: calc(50% - (var(--tracksize) / 2));
+    top: calc(50% - (var(--tracksize) / 2));
+
+    /* Adjust its position based on the --angle, while also taking the --angle-offset into account */
+    translate: calc(cos((var(--angle) + var(--angle-offset))) * var(--radius)) calc(sin((var(--angle) + var(--angle-offset))) * var(--radius) * -1);
+
+    /* Other things */
+    pointer-events: none;
+}
+
+@layer visual {
+    #visual {
+        --radius: 20vmin;
+        --tracksize: 3vmin;
+        --angle-offset: 0deg;
+
+        width: calc(var(--radius) * 2);
+        aspect-ratio: 1;
+        border-radius: 50%;
+
+        margin: 0 auto;
+        position: relative;
+    }
+
+    #visual::after {
+        content: '';
+        --size: calc(var(--tracksize) / 2);
+
+        /* Make it round */
+        display: block;
+        width: var(--size);
+        aspect-ratio: 1;
+        border-radius: 50%;
+
+        /* Put it in the center */
+        position: absolute;
+        left: calc(50% - (var(--size) / 2));
+        top: calc(50% - (var(--size) / 2));
+        z-index: 2;
+
+        /* Make it black */
+        background: #333;
+    }
+}
+
+
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 20px;
+}
+
+p {
+    padding-top: 20px;
+    text-align: center;
+    margin: auto 20%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: rgb(157, 157, 185);
+}
